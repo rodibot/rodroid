@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">RoDI Android app</string>
+    <string name="hello_rodi">Hello RoDI</string>
+    <string name="buttonRight">Right</string>
+    <string name="buttonReverse">Reverse</string>
+    <string name="buttonForward">Forward</string>
+    <string name="buttonLeft">Left</string>
+    <string name="stop">Stop</string>
+</resources>

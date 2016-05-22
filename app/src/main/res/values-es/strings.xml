@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Rodroid 0.01</string>
+    <string name="hello_rodi">Hola RoDI</string>
+    <string name="buttonForward">Adelantar</string>
+    <string name="buttonLeft">Izquierda</string>
+    <string name="buttonRight">Derecha</string>
+    <string name="stop">Detener</string>
+    <string name="buttonReverse">Retroceder</string>
+</resources>
