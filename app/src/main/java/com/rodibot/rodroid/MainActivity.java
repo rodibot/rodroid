@@ -16,17 +16,48 @@
 
 package com.rodibot.rodroid;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-    Transport transport = new Transport();
+
+    private Transport transport = new Transport();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Button moveLeft = (Button) findViewById(R.id.buttonLeft);
+        assert moveLeft != null;
+        moveLeft.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    transport.moveLeft();
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    transport.restoreState();
+                }
+                return false;
+            }
+        });
+
+        Button moveRight = (Button) findViewById(R.id.buttonRight);
+        assert moveRight != null;
+        moveRight.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    transport.moveRight();
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    transport.restoreState();
+                }
+                return false;
+            }
+        });
     }
 
     public void moveForward(View view) {
@@ -35,14 +66,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void moveReverse(View view) {
         transport.moveReverse();
-    }
-
-    public void moveRight(View view) {
-        transport.moveRight();
-    }
-
-    public void moveLeft(View view) {
-        transport.moveLeft();
     }
 
     public void stop(View view) {

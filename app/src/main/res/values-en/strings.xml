@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Rodroid 0.01</string>
+    <string name="app_name">Rodroid</string>
     <string name="hello_rodi">Hello RoDI</string>
     <string name="buttonForward">Forward</string>
     <string name="buttonLeft">Turn left</string>
     <string name="buttonRight">Turn right</string>
     <string name="stop">Stop</string>
     <string name="buttonReverse">Reverse</string>
+    <string name="errorMessage">Connection Error</string>
 </resources>

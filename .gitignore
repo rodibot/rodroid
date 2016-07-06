@@ -1,0 +1,5 @@
+.idea/*
+*.iml
+*.apk
+build/*
+local.properties

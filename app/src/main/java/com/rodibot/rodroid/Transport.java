@@ -16,19 +16,33 @@
 
 package com.rodibot.rodroid;
 
-import com.android.volley.*;
+import android.widget.Toast;
+
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 public class Transport {
 
-    private enum COMMANDS {
+    private static final RetryPolicy RETRY_POLICY = new DefaultRetryPolicy(400, 0,
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+
+    private static final String HOSTNAME = "192.168.4.1";
+
+    private static final String PORT = "1234";
+
+    private enum Commands {
         BLINK(1), SENSE(2), MOVE(3), SING(4), SEE(5),
         PIXEL(6), LIGHT(7), LED(8), IMU(9);
 
         private int value;
 
-        COMMANDS(int value) {
+        Commands(int value) {
             this.value = value;
         }
 
@@ -37,34 +51,41 @@ public class Transport {
         }
     }
 
-    String hostname = "192.168.4.1";
-    String port = "1234";
-    RequestQueue queue = Volley.newRequestQueue(Rodroid.getAppContext());
+    private int speed = 0;
+
+    private RequestQueue queue = Volley.newRequestQueue(Rodroid.getAppContext());
 
     public void moveForward() {
-        sendCommand(COMMANDS.MOVE, 100, 100);
-    }
-
-    public void moveReverse() {
-        sendCommand(COMMANDS.MOVE, -100,-100);
-    }
-
-    public void moveLeft() {
-        sendCommand(COMMANDS.MOVE, -100, 100);
-    }
-
-    public void moveRight() {
-        sendCommand(COMMANDS.MOVE, 100, -100);
+        speed = 100;
+        sendCommand(Commands.MOVE, speed, speed);
     }
 
     public void stop() {
-        sendCommand(COMMANDS.MOVE, 0, 0);
+        speed = 0;
+        sendCommand(Commands.MOVE, speed, speed);
     }
 
-    private void sendCommand(COMMANDS cmd, Integer param1, Integer param2) {
-        String url = "http://" + hostname + ":" + port + "/" + cmd.getValue() + "/" + param1 + "/" + param2;
+    public void moveReverse() {
+        speed = -100;
+        sendCommand(Commands.MOVE, speed, speed);
+    }
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+    public void moveLeft() {
+        sendCommand(Commands.MOVE, speed == 0 ? -100 : 0, speed == 0 ? 100 : speed);
+    }
+
+    public void moveRight() {
+        sendCommand(Commands.MOVE, speed == 0 ? 100 : speed, speed == 0 ? -100 : 0);
+    }
+
+    public void restoreState() {
+        sendCommand(Commands.MOVE, speed, speed);
+    }
+
+    private void sendCommand(Commands cmd, Integer param1, Integer param2) {
+        String url = "http://" + HOSTNAME + ":" + PORT + "/" + cmd.getValue() + "/" + param1 + "/" + param2;
+
+        StringRequest req = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 System.out.println(response);
@@ -72,9 +93,11 @@ public class Transport {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("Communication with RoDI failed");
-                error.printStackTrace();
-            }});
-        queue.add(stringRequest);
+                String errorMsg = Rodroid.getAppContext().getString(R.string.errorMessage);
+                Toast.makeText(Rodroid.getAppContext(), errorMsg, Toast.LENGTH_LONG).show();
+            }
+        });
+        req.setRetryPolicy(RETRY_POLICY);
+        queue.add(req);
     }
 }

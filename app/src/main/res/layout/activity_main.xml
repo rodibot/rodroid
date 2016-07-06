@@ -27,8 +27,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_gravity="left|center_vertical"
-        android:onClick="moveLeft" />
+        android:layout_gravity="left|center_vertical" />
 
     <Button
         android:layout_width="wrap_content"
@@ -47,7 +46,6 @@
         android:text="@string/buttonRight"
         android:id="@+id/buttonRight"
         android:layout_gravity="right|center_vertical"
-        android:onClick="moveRight"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignTop="@+id/buttonStop"
